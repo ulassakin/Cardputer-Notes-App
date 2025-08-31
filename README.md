@@ -1,4 +1,4 @@
-# 📝 Cardputer Notes App (WIP)
+# 📝 Cardputer Notes App 
 
 A small Notes app for the **M5Stack Cardputer (ESP32‑S3)**.  
 Currently supports a menu, creating notes (stored in RAM), and an About screen.

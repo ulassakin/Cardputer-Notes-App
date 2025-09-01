@@ -46,7 +46,7 @@ lib_deps =
 ## 🎮 Controls
 ### The cardputer is controlled through the built-in keyboard
 - `1` = New Note
-- `2` = View Notes (TODO)
+- `2` = View Notes 
 - `3` = About
 - **Enter** = Save note
 - **ESC** = Return to menu

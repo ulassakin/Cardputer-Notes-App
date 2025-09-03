@@ -1,24 +1,29 @@
 # 📝 Cardputer Notes App 
 
 A small Notes app for the **M5Stack Cardputer (ESP32‑S3)**.  
-Currently supports a menu, creating notes (stored in RAM), and an About screen.
+Supports creating, viewing, and storing up to 20 notes in memory.
 
 ---
 ![Cardputer](photos/notes.jpeg)
+
 ## ✅ Current Features
 - **Menu** with 3 options (New Note, View Notes, About)
 - **New Note** screen
   - Type text smoothly with `M5Canvas`
-  - **Enter** saves the note (in memory)
+  - Editable text with cursor navigation (left/right arrows)
+  - **Backspace/Delete** support
+  - **Enter** saves the note (in memory, max 20)
   - **` (backtick)** returns to menu
-- **About** screen with version info
+- **View Notes** screen
+  - Displays all saved notes (scrollable list)
+  - **` (backtick)** returns to menu
+- **About** screen with version info (v1.0 by Ulas)
 
 ---
 
 ## ⚠️ Limitations
 - Notes are not persistent (lost on reset)
-- No backspace support yet
-- View Notes is not implemented
+- Limited to 20 notes in RAM
 
 ---
 
@@ -49,7 +54,8 @@ lib_deps =
 - `2` = View Notes 
 - `3` = About
 - **Enter** = Save note
-- **ESC** = Return to menu
-
+- **Del** = Backspace/Delete
+- **← / → arrows** = Move cursor
+- **ESC / ` (backtick)** = Return to menu
 
 ---

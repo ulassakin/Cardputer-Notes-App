@@ -70,30 +70,32 @@ void drawNoteWithCursor() {
     int startY = 0;
 
     String header = "New Note (press Enter to save):";
-    notecanvas.setCursor(0, 0);
+    notecanvas.setCursor(startX, startY);
+    notecanvas.setTextColor(WHITE, BLACK);
     notecanvas.print(header);
     notecanvas.print(currentNote);
 
-    // String until cursor. Cursor can be aynwhere so we should do this to draw to the cursor location
-    String beforeCursor = header + currentNote.substring(0, cursorPosition);
-
-    // measurements
-    int totalWidth = notecanvas.textWidth(beforeCursor); // Where to draw cursor in x 
-    int fontHeight = notecanvas.fontHeight(); // How long is cursor
-    int lineWidth = notecanvas.width() - 2 * startX; // How long is one line
-
-    // How many lines down
-    int lineNumber = totalWidth / lineWidth; // How many integer lines do we have 
-    int lineOffset = totalWidth % lineWidth; // What is the length of the last line we are currently typing
+    // -----------------------------
+    // Monospace cursor calculation
+    // -----------------------------
+    // Character width and how many character by line
+    int charWidth = notecanvas.textWidth("A");
+    int fontHeight = notecanvas.fontHeight();
+    int lineWidth = notecanvas.width() - 2 * startX;
+    int charsPerLine = lineWidth / charWidth;
 
     
-    int cursorX = startX + lineOffset; // X coordiante of the cusor
-    int cursorY = startY + lineNumber * fontHeight; // y coordinate of the cursor
+    int totalChars = (header.length() + cursorPosition);
+
+    int lineNumber = totalChars / charsPerLine;
+    int lineOffset = totalChars % charsPerLine;
+
+    int cursorX = startX + lineOffset * charWidth;
+    int cursorY = startY + lineNumber * fontHeight;
 
     // Draw
     notecanvas.drawLine(cursorX, cursorY, cursorX, cursorY + fontHeight, PURPLE);
-
-    notecanvas.pushSprite(1, 1);
+    notecanvas.pushSprite(0, 0);
 }
 
 
@@ -101,7 +103,16 @@ void drawNoteWithCursor() {
 
 
 
+
+
+
+
+
+
+
 void setup() {
+    Serial.begin(115200);
+    
     auto cfg = M5.config();
     M5Cardputer.begin(cfg, true);
     M5Cardputer.Display.setRotation(1);

@@ -47,7 +47,7 @@ void drawAbout() {
     M5Cardputer.Display.setFont(&fonts::Font0);
     M5Cardputer.Display.setTextSize(2);
     M5Cardputer.Display.setCursor(10, 40);
-    M5Cardputer.Display.println("Notes App v1.0");
+    M5Cardputer.Display.println("Notes App v1.1");
     M5Cardputer.Display.println("by Ulas");
 }
 

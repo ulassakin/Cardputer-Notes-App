@@ -1,6 +1,7 @@
 #include "M5Cardputer.h"
 #include "M5GFX.h"
 
+
 // Define app states
 enum AppState {
     MENU,
@@ -9,9 +10,12 @@ enum AppState {
     ABOUT
 };
 
+//Define the variables
+
 String notes[20];   // max 20 notes for now
 int noteCount = 0;
 String currentNote = "";
+int cursorPosition = 0;
 
 // Current state variable
 AppState currentState = MENU;
@@ -109,27 +113,56 @@ void loop() {
                 auto keys = M5Cardputer.Keyboard.keysState();
 
                 if (keys.enter) {
-                    if (noteCount < 20) {
-                        notes[noteCount++] = currentNote;
+                    if (currentNote != ""){   
+                        if (noteCount < 20) {
+                            notes[noteCount++] = currentNote;
+                        }
+                        currentNote = "";
+                        drawMenu();
+                        currentState = MENU;
                     }
-                    currentNote = "";
-                    drawMenu();
-                    currentState = MENU;
                 }
+
+                
+
+                else if (keys.del && currentNote.length() > 0) {
+                    currentNote.remove(currentNote.length() - 1);
+                    
+                    notecanvas.fillScreen(BLACK);
+                    notecanvas.setCursor(5, 5);
+                    notecanvas.print("New Note (press Enter to save): ");
+                    notecanvas.println(currentNote);
+                    notecanvas.pushSprite(0,0);
+                }
+
+
                 else{
                     for (auto k : keys.word) {
                         if (k == 96){
+
                         drawMenu();
                         currentState = MENU;
                         }
 
-                        
+                        else if (k == 44 && cursorPosition > 0){
+                            cursorPosition--;
+                        }
+                        else if (k == 47 && (cursorPosition < currentNote.length())){
+                            cursorPosition++;
+                        }
 
                         else{
                         
-                        currentNote += k;
-                        notecanvas.print((char)k);
+                        String left  = currentNote.substring(0, cursorPosition);
+                        String right = currentNote.substring(cursorPosition);
+                        currentNote = left + (char)k + right;
+                        cursorPosition++;
+                        notecanvas.fillScreen(BLACK);
+                        notecanvas.setCursor(5, 5);
+                        notecanvas.print("New Note (press Enter to save): ");
+                        notecanvas.println(currentNote);
                         notecanvas.pushSprite(0,0);
+
                         }
                     }
                 }
@@ -144,7 +177,7 @@ void loop() {
             
             notecanvas.fillScreen(BLACK);
             notecanvas.setCursor(10, 40);
-            notecanvas.print("View Notes screen (TODO)");
+            notecanvas.print("View Notes:");
             if (M5Cardputer.Keyboard.isChange() && M5Cardputer.Keyboard.isPressed()) {
                 auto keys = M5Cardputer.Keyboard.keysState();
                 for (auto k : keys.word) {

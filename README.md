@@ -20,7 +20,7 @@ Supports creating, viewing, and storing up to 20 notes in memory.
 - **View Notes** screen
   - Displays all saved notes (scrollable list)
   - **` (backtick)** returns to menu
-- **About** screen with version info (v1.0 by Ulas)
+- **About** screen with version info (v1.1 by Ulas)
 
 ---
 

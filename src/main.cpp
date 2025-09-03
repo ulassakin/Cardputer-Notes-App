@@ -1,7 +1,6 @@
 #include "M5Cardputer.h"
 #include "M5GFX.h"
 
-
 // Define app states
 enum AppState {
     MENU,
@@ -11,7 +10,6 @@ enum AppState {
 };
 
 //Define the variables
-
 String notes[20];   // max 20 notes for now
 int noteCount = 0;
 String currentNote = "";
@@ -51,18 +49,57 @@ void drawAbout() {
     M5Cardputer.Display.setCursor(10, 40);
     M5Cardputer.Display.println("Notes App v1.0");
     M5Cardputer.Display.println("by Ulas");
-
-    
 }
 
 void canvasSetup(){
   notecanvas.createSprite(M5Cardputer.Display.width()-10, 
-                            M5Cardputer.Display.height()-20);
+                          M5Cardputer.Display.height()-20);
 
   notecanvas.setFont(&fonts::Font0);
   notecanvas.setTextSize(2);
   notecanvas.setTextScroll(true);
 }
+
+void drawNoteWithCursor() {
+    notecanvas.fillScreen(BLACK);
+
+    notecanvas.setFont(&fonts::Font0);
+    notecanvas.setTextSize(2);
+
+    int startX = 0;
+    int startY = 0;
+
+    String header = "New Note (press Enter to save):";
+    notecanvas.setCursor(0, 0);
+    notecanvas.print(header);
+    notecanvas.print(currentNote);
+
+    // String until cursor. Cursor can be aynwhere so we should do this to draw to the cursor location
+    String beforeCursor = header + currentNote.substring(0, cursorPosition);
+
+    // measurements
+    int totalWidth = notecanvas.textWidth(beforeCursor); // Where to draw cursor in x 
+    int fontHeight = notecanvas.fontHeight(); // How long is cursor
+    int lineWidth = notecanvas.width() - 2 * startX; // How long is one line
+
+    // How many lines down
+    int lineNumber = totalWidth / lineWidth; // How many integer lines do we have 
+    int lineOffset = totalWidth % lineWidth; // What is the length of the last line we are currently typing
+
+    
+    int cursorX = startX + lineOffset; // X coordiante of the cusor
+    int cursorY = startY + lineNumber * fontHeight; // y coordinate of the cursor
+
+    // Draw
+    notecanvas.drawLine(cursorX, cursorY, cursorX, cursorY + fontHeight, PURPLE);
+
+    notecanvas.pushSprite(1, 1);
+}
+
+
+
+
+
 
 void setup() {
     auto cfg = M5.config();
@@ -82,13 +119,12 @@ void loop() {
             if (M5Cardputer.Keyboard.isChange() && M5Cardputer.Keyboard.isPressed()) {
                 auto keys = M5Cardputer.Keyboard.keysState();
                 for (auto k : keys.word) {
-                    Serial.println(keys.word.size());
                     if (k == '1') {
-                        currentState = NEW_NOTE;  
-                    
+                        currentState = NEW_NOTE; 
+                        M5Cardputer.Display.fillScreen(BLACK); 
+                        drawNoteWithCursor();
                     } else if (k == '2') {
                         currentState = VIEW_NOTES;
-                        
                     } else if (k == '3') {
                         currentState = ABOUT;
                         drawAbout();
@@ -99,16 +135,7 @@ void loop() {
         }
 
         case NEW_NOTE: {
-    
-            if (currentNote == "") {
-              
-              notecanvas.fillScreen(BLACK);
-              notecanvas.setCursor(5, 5);
-              notecanvas.print("New Note (press Enter to save): ");
-              notecanvas.pushSprite(0,0);
-              currentNote = "";
-              
-            }
+            
             if (M5Cardputer.Keyboard.isChange() && M5Cardputer.Keyboard.isPressed()) {
                 auto keys = M5Cardputer.Keyboard.keysState();
 
@@ -118,66 +145,53 @@ void loop() {
                             notes[noteCount++] = currentNote;
                         }
                         currentNote = "";
+                        cursorPosition = 0;
                         drawMenu();
                         currentState = MENU;
                     }
                 }
-
-                
-
                 else if (keys.del && currentNote.length() > 0) {
                     currentNote.remove(currentNote.length() - 1);
-                    
-                    notecanvas.fillScreen(BLACK);
-                    notecanvas.setCursor(5, 5);
-                    notecanvas.print("New Note (press Enter to save): ");
-                    notecanvas.println(currentNote);
-                    notecanvas.pushSprite(0,0);
+                    if (cursorPosition > 0) cursorPosition--;
+                    drawNoteWithCursor();
                 }
-
-
-                else{
+                else {
                     for (auto k : keys.word) {
-                        if (k == 96){
-
-                        drawMenu();
-                        currentState = MENU;
+                        if (k == 96){ // Escape button
+                            drawMenu();
+                            currentState = MENU;
                         }
-
-                        else if (k == 44 && cursorPosition > 0){
+                        else if (k == 44 && cursorPosition > 0){ // left arrow
                             cursorPosition--;
+                            drawNoteWithCursor();
                         }
-                        else if (k == 47 && (cursorPosition < currentNote.length())){
+                        else if (k == 47 && (cursorPosition < currentNote.length())){ // right arrow
                             cursorPosition++;
+                            drawNoteWithCursor();
                         }
-
-                        else{
-                        
-                        String left  = currentNote.substring(0, cursorPosition);
-                        String right = currentNote.substring(cursorPosition);
-                        currentNote = left + (char)k + right;
-                        cursorPosition++;
-                        notecanvas.fillScreen(BLACK);
-                        notecanvas.setCursor(5, 5);
-                        notecanvas.print("New Note (press Enter to save): ");
-                        notecanvas.println(currentNote);
-                        notecanvas.pushSprite(0,0);
-
+                        else {
+                            String left  = currentNote.substring(0, cursorPosition);
+                            String right = currentNote.substring(cursorPosition);
+                            currentNote = left + (char)k + right;
+                            cursorPosition++;
+                            drawNoteWithCursor();
                         }
                     }
                 }
             }
-
-            
-            
             break;
         }
 
         case VIEW_NOTES: {
-            
             notecanvas.fillScreen(BLACK);
             notecanvas.setCursor(10, 40);
             notecanvas.print("View Notes:");
+            for(int i=0; i<noteCount; i++){
+                notecanvas.setCursor(10, 70 + i*20);
+                notecanvas.print(String(i+1) + ". " + notes[i]);
+            }
+            notecanvas.pushSprite(0,0);
+
             if (M5Cardputer.Keyboard.isChange() && M5Cardputer.Keyboard.isPressed()) {
                 auto keys = M5Cardputer.Keyboard.keysState();
                 for (auto k : keys.word) {

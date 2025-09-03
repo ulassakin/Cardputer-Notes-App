@@ -4,7 +4,10 @@ A small Notes app for the **M5Stack Cardputer (ESP32‑S3)**.
 Supports creating, viewing, and storing up to 20 notes in memory.
 
 ---
-![Cardputer](photos/notes.jpeg)
+<p align="center">
+  <img src="photos/notes.jpeg" alt="Cardputer" width="400"/>
+</p>
+
 
 ## ✅ Current Features
 - **Menu** with 3 options (New Note, View Notes, About)

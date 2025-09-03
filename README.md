@@ -16,10 +16,10 @@ Supports creating, viewing, and storing up to 20 notes in memory.
   - Editable text with cursor navigation (left/right arrows)
   - **Backspace/Delete** support
   - **Enter** saves the note (in memory, max 20)
-  - **` (backtick)** returns to menu
+  - **ESC** returns to menu
 - **View Notes** screen
   - Displays all saved notes (scrollable list)
-  - **` (backtick)** returns to menu
+  - **ESC** returns to menu
 - **About** screen with version info (v1.1 by Ulas)
 
 ---

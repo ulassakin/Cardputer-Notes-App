@@ -1,7 +1,7 @@
 #include "M5Cardputer.h"
 #include "M5GFX.h"
 
-// Uygulama durumlarını (state) tanımlıyoruz
+// Define app states
 enum AppState {
     MENU,
     NEW_NOTE,
@@ -9,14 +9,14 @@ enum AppState {
     ABOUT
 };
 
-String notes[20];   // max 20 not
+String notes[20];   // max 20 notes for now
 int noteCount = 0;
 String currentNote = "";
 
-// Şu anki state'i tutan değişken
+// Current state variable
 AppState currentState = MENU;
 
-M5Canvas notecanvas(&M5Cardputer.Display);
+M5Canvas notecanvas(&M5Cardputer.Display); //Create the canvas
 
 void drawMenu() {
     // Clear screen
@@ -28,7 +28,7 @@ void drawMenu() {
         M5Cardputer.Display.height(),
         PURPLE);
 
-    // Küçük default font
+    // Small default font
     M5Cardputer.Display.setFont(&fonts::Font0);
     M5Cardputer.Display.setTextSize(2);
 
@@ -48,7 +48,7 @@ void drawAbout() {
     M5Cardputer.Display.println("Notes App v1.0");
     M5Cardputer.Display.println("by Ulas");
 
-    // Not: ileride geri dönüş için bir tuş da ekleyeceğiz
+    
 }
 
 void canvasSetup(){
@@ -66,7 +66,7 @@ void setup() {
     M5Cardputer.Display.setRotation(1);
     canvasSetup();
 
-    // Başlangıçta menüyü çiz
+    // Draw the main menu at the beginning
     drawMenu();
 }
 
@@ -78,12 +78,13 @@ void loop() {
             if (M5Cardputer.Keyboard.isChange() && M5Cardputer.Keyboard.isPressed()) {
                 auto keys = M5Cardputer.Keyboard.keysState();
                 for (auto k : keys.word) {
+                    Serial.println(keys.word.size());
                     if (k == '1') {
-                        currentState = NEW_NOTE;  // Şimdilik sadece state değişiyor
-                        // ileride drawNewNote() yapacağız
+                        currentState = NEW_NOTE;  
+                    
                     } else if (k == '2') {
                         currentState = VIEW_NOTES;
-                        // ileride drawViewNotes() yapacağız
+                        
                     } else if (k == '3') {
                         currentState = ABOUT;
                         drawAbout();
@@ -94,9 +95,9 @@ void loop() {
         }
 
         case NEW_NOTE: {
-            // Geçici mesaj
+    
             if (currentNote == "") {
-              // İlk girişte ekranı temizle
+              
               notecanvas.fillScreen(BLACK);
               notecanvas.setCursor(5, 5);
               notecanvas.print("New Note (press Enter to save): ");
@@ -106,37 +107,41 @@ void loop() {
             }
             if (M5Cardputer.Keyboard.isChange() && M5Cardputer.Keyboard.isPressed()) {
                 auto keys = M5Cardputer.Keyboard.keysState();
-                for (auto k : keys.word) {
-                    if (k == 96){
-                      drawMenu();
-                      currentState = MENU;
-                    }
 
-                    else if (keys.enter){
-                      if (noteCount < 20){
+                if (keys.enter) {
+                    if (noteCount < 20) {
                         notes[noteCount++] = currentNote;
-                      }
-                      currentNote = "";
-                      drawMenu();
-                      currentState = MENU;
                     }
+                    currentNote = "";
+                    drawMenu();
+                    currentState = MENU;
+                }
+                else{
+                    for (auto k : keys.word) {
+                        if (k == 96){
+                        drawMenu();
+                        currentState = MENU;
+                        }
 
-                    else{
-                      
-                      currentNote += k;
-                      notecanvas.print((char)k);
-                      notecanvas.pushSprite(0,0);
+                        
+
+                        else{
+                        
+                        currentNote += k;
+                        notecanvas.print((char)k);
+                        notecanvas.pushSprite(0,0);
+                        }
                     }
                 }
             }
 
             
-            // ileride buraya input sistemi gelecek
+            
             break;
         }
 
         case VIEW_NOTES: {
-            // Geçici mesaj
+            
             notecanvas.fillScreen(BLACK);
             notecanvas.setCursor(10, 40);
             notecanvas.print("View Notes screen (TODO)");

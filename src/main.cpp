@@ -15,7 +15,7 @@ int noteCount = 0;
 String currentNote = "";
 int cursorPosition = 0;
 
-//Slding window
+// Sliding window
 int startIndex = 0;
 int selectedIndex = 0;
 int windowSize = 8;
@@ -57,13 +57,13 @@ void drawAbout() {
     M5Cardputer.Display.setFont(&fonts::Font0);
     M5Cardputer.Display.setTextSize(2);
     M5Cardputer.Display.setCursor(10, 40);
-    M5Cardputer.Display.println("Notes App v1.1");
+    M5Cardputer.Display.println("Notes App v1.2");
     M5Cardputer.Display.println("by Ulas");
 }
 
 void canvasSetup(){
-  notecanvas.createSprite(M5Cardputer.Display.width()-10, 
-                          M5Cardputer.Display.height()-20);
+  notecanvas.createSprite(M5Cardputer.Display.width(), 
+                          M5Cardputer.Display.height());
 
   notecanvas.setFont(&fonts::Font0);
   notecanvas.setTextSize(2);
@@ -204,46 +204,49 @@ void loop() {
 
         case VIEW_NOTES: {
             notecanvas.fillScreen(BLACK);
-            
-            
-            
+
             for (int i = 0; i < windowSize; i++){
-                notecanvas.setCursor(0,i* 20);
                 int noteIndex = startIndex + i;
-                if (noteIndex < 20){
-                    if (selectedIndex == noteIndex){
-                        notecanvas.println(">" + notes[noteIndex].substring(0,15));
+                if (noteIndex < noteCount) {
+                    int marginTop = 5;
+                    notecanvas.setCursor(0, i * notecanvas.fontHeight());
+
+                    if (selectedIndex == noteIndex) {
+                        // Highlight: purple background with white text
+                        notecanvas.setTextColor(WHITE, PURPLE);
+                        notecanvas.println(notes[noteIndex].substring(0,15));
+                        notecanvas.setTextColor(WHITE, BLACK); // reset
                     }
-                    else{
+                    else {
+                        notecanvas.setTextColor(WHITE, BLACK);
                         notecanvas.println(notes[noteIndex].substring(0,15));
                     }
                 }
             }
 
             notecanvas.pushSprite(0,0);
-            
-
-
 
             if (M5Cardputer.Keyboard.isChange() && M5Cardputer.Keyboard.isPressed()) {
                 auto keys = M5Cardputer.Keyboard.keysState();
                 for (auto k : keys.word) {
                     if (k == 96){
-                      drawMenu();
-                      currentState = MENU;
+                        drawMenu();
+                        currentState = MENU;
                     }
-                    else if (k == 46 && selectedIndex < 12){
+                    else if (k == 46 && selectedIndex < noteCount - 1) { // down arrow
                         selectedIndex++;
                         if(selectedIndex >= startIndex + windowSize){
                             startIndex++;
                         }
                     }
-                    else if (k == 59 && selectedIndex > 0){
+                    else if (k == 59 && selectedIndex > 0) { // up arrow
                         selectedIndex--;
-                        if(selectedIndex < startIndex ){
+                        if(selectedIndex < startIndex){
                             startIndex--;
+                            if (startIndex < 0) startIndex = 0;
                         }
                     }
+                }
             }
             break;
         }
@@ -253,8 +256,8 @@ void loop() {
                 auto keys = M5Cardputer.Keyboard.keysState();
                 for (auto k : keys.word) {
                     if (k == 96){
-                      drawMenu();
-                      currentState = MENU;
+                        drawMenu();
+                        currentState = MENU;
                     }
                 }
             }

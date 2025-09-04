@@ -9,11 +9,16 @@ enum AppState {
     ABOUT
 };
 
-//Define the variables
+// Define the variables
 String notes[20];   // max 20 notes for now
 int noteCount = 0;
 String currentNote = "";
 int cursorPosition = 0;
+
+// Cursor blinking
+bool cursorVisible = true;
+unsigned long lastBlink = 0;
+const unsigned long blinkInterval = 500; // ms
 
 // Current state variable
 AppState currentState = MENU;
@@ -78,13 +83,11 @@ void drawNoteWithCursor() {
     // -----------------------------
     // Monospace cursor calculation
     // -----------------------------
-    // Character width and how many character by line
     int charWidth = notecanvas.textWidth("A");
     int fontHeight = notecanvas.fontHeight();
     int lineWidth = notecanvas.width() - 2 * startX;
     int charsPerLine = lineWidth / charWidth;
 
-    
     int totalChars = (header.length() + cursorPosition);
 
     int lineNumber = totalChars / charsPerLine;
@@ -93,22 +96,13 @@ void drawNoteWithCursor() {
     int cursorX = startX + lineOffset * charWidth;
     int cursorY = startY + lineNumber * fontHeight;
 
-    // Draw
-    notecanvas.drawLine(cursorX, cursorY, cursorX, cursorY + fontHeight, PURPLE);
+    // Draw cursor only if visible
+    if (cursorVisible) {
+        notecanvas.drawLine(cursorX, cursorY, cursorX, cursorY + fontHeight, PURPLE);
+    }
+
     notecanvas.pushSprite(0, 0);
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 void setup() {
     Serial.begin(115200);
@@ -124,6 +118,15 @@ void setup() {
 
 void loop() {
     M5Cardputer.update();
+
+    // Handle blinking in NEW_NOTE state
+    if (currentState == NEW_NOTE) {
+        if (millis() - lastBlink >= blinkInterval) {
+            cursorVisible = !cursorVisible;  // toggle cursor state
+            lastBlink = millis();
+            drawNoteWithCursor();  // refresh display
+        }
+    }
 
     switch (currentState) {
         case MENU: {
@@ -146,7 +149,6 @@ void loop() {
         }
 
         case NEW_NOTE: {
-            
             if (M5Cardputer.Keyboard.isChange() && M5Cardputer.Keyboard.isPressed()) {
                 auto keys = M5Cardputer.Keyboard.keysState();
 
@@ -162,8 +164,10 @@ void loop() {
                     }
                 }
                 else if (keys.del && currentNote.length() > 0) {
-                    currentNote.remove(currentNote.length() - 1);
-                    if (cursorPosition > 0) cursorPosition--;
+                    if (cursorPosition > 0) {
+                        currentNote.remove(cursorPosition -1, 1);
+                        cursorPosition--;
+                    }
                     drawNoteWithCursor();
                 }
                 else {
@@ -229,3 +233,4 @@ void loop() {
         }
     }
 }
+

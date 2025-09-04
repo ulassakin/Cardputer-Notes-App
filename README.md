@@ -4,7 +4,7 @@ A lightweight Notes app for the **M5Stack Cardputer (ESP32‑S3)**.
 This version includes a working menu system, note creation with editing features, note storage in memory, and a notes viewer.
 
 ---
-![Cardputer](photos/notes.jpeg)
+![Cardputer](photos/notes1.jpeg)
 
 ## ✅ Features (Current)
 - **Menu** with 3 options:  

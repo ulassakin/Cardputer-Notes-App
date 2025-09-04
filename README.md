@@ -28,7 +28,6 @@ This version includes a working menu system, note creation with editing features
 
 ## ⚠️ Limitations (Current)
 - Notes are stored in RAM → lost on reset (no persistent storage yet)
-- Only 20 notes maximum
 - No multi-line editing yet
 - Scrolling in note editor not implemented
 

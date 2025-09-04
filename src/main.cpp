@@ -219,7 +219,11 @@ void loop() {
                     }
                 }
             }
+
             notecanvas.pushSprite(0,0);
+            
+
+
 
             if (M5Cardputer.Keyboard.isChange() && M5Cardputer.Keyboard.isPressed()) {
                 auto keys = M5Cardputer.Keyboard.keysState();
@@ -228,7 +232,18 @@ void loop() {
                       drawMenu();
                       currentState = MENU;
                     }
-                }
+                    else if (k == 46 && selectedIndex < 12){
+                        selectedIndex++;
+                        if(selectedIndex >= startIndex + windowSize){
+                            startIndex++;
+                        }
+                    }
+                    else if (k == 59 && selectedIndex > 0){
+                        selectedIndex--;
+                        if(selectedIndex < startIndex ){
+                            startIndex--;
+                        }
+                    }
             }
             break;
         }

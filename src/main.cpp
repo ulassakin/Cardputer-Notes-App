@@ -15,6 +15,11 @@ int noteCount = 0;
 String currentNote = "";
 int cursorPosition = 0;
 
+//Slding window
+int startIndex = 0;
+int selectedIndex = 0;
+int windowSize = 8;
+
 // Cursor blinking
 bool cursorVisible = true;
 unsigned long lastBlink = 0;
@@ -199,11 +204,20 @@ void loop() {
 
         case VIEW_NOTES: {
             notecanvas.fillScreen(BLACK);
-            notecanvas.setCursor(10, 40);
-            notecanvas.print("View Notes:");
-            for(int i=0; i<noteCount; i++){
-                notecanvas.setCursor(10, 70 + i*20);
-                notecanvas.print(String(i+1) + ". " + notes[i]);
+            
+            
+            
+            for (int i = 0; i < windowSize; i++){
+                notecanvas.setCursor(0,i* 20);
+                int noteIndex = startIndex + i;
+                if (noteIndex < 20){
+                    if (selectedIndex == noteIndex){
+                        notecanvas.println(">" + notes[noteIndex].substring(0,15));
+                    }
+                    else{
+                        notecanvas.println(notes[noteIndex].substring(0,15));
+                    }
+                }
             }
             notecanvas.pushSprite(0,0);
 
@@ -233,4 +247,3 @@ void loop() {
         }
     }
 }
-

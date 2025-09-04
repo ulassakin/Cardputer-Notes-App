@@ -60,7 +60,4 @@ lib_deps =
 - Enable **multi-line note editing**
 - Enhance **cursor & text rendering** for smoother UX
 
----
 
-## 📸 Screenshot
-![Notes App](photos/notes.jpeg)

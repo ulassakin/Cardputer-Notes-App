@@ -51,6 +51,7 @@ It provides a simple way to create, edit, and view text notes directly on the de
 5. In *View Notes*:
    - Use arrow keys to scroll.  
    - Press `Enter` to edit a selected note.
+   - Press `delete` to delete an existing note.
 
 ---
 

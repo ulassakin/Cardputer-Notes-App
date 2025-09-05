@@ -58,6 +58,7 @@ It provides a simple way to create, edit, and view text notes directly on the de
 ## 📷 Screenshots
 <img src="photos/notes1.jpeg" alt="Cardputer Notes App" width="350" align="left" />
 <img src="photos/IMG_5054.jpg" alt="Cardputer Notes App" width="350" align="left" />
+
 ---
 
 

@@ -60,7 +60,7 @@ It provides a simple way to create, edit, and view text notes directly on the de
 
 ---
 
-```markdown
+
 ## 📂 PlatformIO `platformio.ini`
 
 ```ini

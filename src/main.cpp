@@ -16,6 +16,8 @@ int noteCount = 0;
 String currentNote = "";
 int cursorPosition = 0;
 
+
+
 // Sliding window
 int startIndex = 0;
 int selectedIndex = 0;
@@ -96,15 +98,24 @@ void drawNoteWithCursor() {
     int fontHeight = notecanvas.fontHeight();
     int lineWidth = notecanvas.width() - 2 * startX;
     int charsPerLine = lineWidth / charWidth;
-
+    //Toplam 160 tane karakter sığıyor ekrana
+    //Toplam karakter sayısı 160 ı geçtiğinde cursor ın daha fazla hareket etmemesi gerekiyor.
     int totalChars = (header.length() + cursorPosition);
 
     int lineNumber = totalChars / charsPerLine;
     int lineOffset = totalChars % charsPerLine;
 
-    int cursorX = startX + lineOffset * charWidth;
-    int cursorY = startY + lineNumber * fontHeight;
+    int cursorX;
+    int cursorY;
 
+    if (lineNumber >= 8 ){
+        cursorX = lineOffset * charWidth;
+        cursorY = 7 * fontHeight + 5;
+    }
+    else{
+        cursorX = startX + lineOffset * charWidth;
+        cursorY = startY + lineNumber * fontHeight;
+    }
     // Draw cursor only if visible
     if (cursorVisible) {
         notecanvas.drawLine(cursorX, cursorY, cursorX, cursorY + fontHeight, WHITE);
@@ -237,6 +248,16 @@ void loop() {
                         currentState = EDIT_NOTE;
                         cursorPosition = currentNote.length();
                         drawNoteWithCursor();
+                }
+
+                else if (keys.del){
+                    
+                    
+                    for (int i = selectedIndex; i < noteCount - 1; i++) {
+                        notes[i] = notes[i + 1];  // notları kaydır
+                    }
+                    noteCount--;  
+                    if (selectedIndex >= noteCount) selectedIndex = noteCount - 1;
                 }
                 
                 else{

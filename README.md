@@ -63,6 +63,7 @@ It provides a simple way to create, edit, and view text notes directly on the de
 ## 📂 PlatformIO `platformio.ini`
 
 ```ini
+
 [env:cardputer]
 platform = espressif32
 board = esp32-s3-devkitc-1
@@ -78,3 +79,4 @@ lib_deps =
     m5stack/M5Cardputer@^1.0.3
     m5stack/M5GFX@^0.2.9
     m5stack/M5Unified@^0.2.7
+```

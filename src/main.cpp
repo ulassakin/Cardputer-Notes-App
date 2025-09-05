@@ -86,7 +86,7 @@ void drawNoteWithCursor() {
 
     notecanvas.setCursor(startX, startY);
     notecanvas.setTextColor(WHITE, BLACK);
-    notecanvas.print(header);
+    notecanvas.print(header + "         ");
     notecanvas.print(currentNote);
 
     // -----------------------------
@@ -97,10 +97,14 @@ void drawNoteWithCursor() {
     int lineWidth = notecanvas.width() - 2 * startX;
     int charsPerLine = lineWidth / charWidth;
 
-    int totalChars = (header.length() + cursorPosition);
+    // Header satır sayısı
+    int headerChars = header.length();
+    int headerLines = headerChars / charsPerLine;
+    if (headerChars % charsPerLine != 0) headerLines++;
 
-    int lineNumber = totalChars / charsPerLine;
-    int lineOffset = totalChars % charsPerLine;
+    // Cursor pozisyonu sadece note kısmına göre
+    int lineNumber = headerLines + (cursorPosition / charsPerLine);
+    int lineOffset = cursorPosition % charsPerLine;
 
     int cursorX = startX + lineOffset * charWidth;
     int cursorY = startY + lineNumber * fontHeight;
@@ -235,7 +239,7 @@ void loop() {
                 if (keys.enter && noteCount > 0){
                         currentNote = notes[selectedIndex];
                         currentState = EDIT_NOTE;
-                        cursorPosition = currentNote.length();
+                        cursorPosition = currentNote.length() + 1;
                         drawNoteWithCursor();
                 }
                 
@@ -281,7 +285,7 @@ void loop() {
                 }
                 else if (keys.del && currentNote.length() > 0) {
                     if (cursorPosition > 0) {
-                        currentNote.remove(cursorPosition -1, 1);
+                        currentNote.remove(cursorPosition -2, 1);
                         cursorPosition--;
                     }
                     drawNoteWithCursor();

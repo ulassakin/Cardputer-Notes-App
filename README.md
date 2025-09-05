@@ -61,7 +61,7 @@ It provides a simple way to create, edit, and view text notes directly on the de
 ---
 
 
-## 📂 PlatformIO platformio.ini
+**📂 PlatformIO (platformio.ini)**
 
 ```ini
 [env:cardputer]

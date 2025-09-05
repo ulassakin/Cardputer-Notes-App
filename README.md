@@ -1,32 +1,35 @@
-# 📝 Cardputer Notes App 
+# 📝 Cardputer Notes App (Current Version)
 
-A small Notes app for the **M5Stack Cardputer (ESP32‑S3)**.  
-Supports creating, viewing, and storing up to 20 notes in memory.
-
----
-<img src="photos/notes1.jpeg" alt="Cardputer" width="400" align="left"/>
-<br clear="left"/>
-
-
-
-## ✅ Current Features
-- **Menu** with 3 options (New Note, View Notes, About)
-- **New Note** screen
-  - Type text smoothly with `M5Canvas`
-  - Editable text with cursor navigation (left/right arrows)
-  - **Backspace/Delete** support
-  - **Enter** saves the note (in memory, max 20)
-  - **ESC** returns to menu
-- **View Notes** screen
-  - Displays all saved notes (scrollable list)
-  - **ESC** returns to menu
-- **About** screen with version info (v1.1 by Ulas)
+A lightweight Notes app for the **M5Stack Cardputer (ESP32‑S3)**.  
+This version includes a working menu system, note creation with editing features, note storage in memory, and a notes viewer.
 
 ---
+![Cardputer](photos/notes1.jpeg)
 
-## ⚠️ Limitations
-- Notes are not persistent (lost on reset)
-- Limited to 20 notes in RAM
+## ✅ Features (Current)
+- **Menu** with 3 options:  
+  1. **New Note**  
+  2. **View Notes**  
+  3. **About**
+- **New Note**
+  - Type text with `M5Canvas`
+  - **Backspace/Delete support** (remove characters before cursor)
+  - **Left / Right arrows** move the cursor
+  - **Enter** saves the note (stored in RAM, up to 20 notes)
+  - **` (backtick)** returns to menu
+  - Cursor visibly blinks for feedback
+- **View Notes**
+  - Shows saved notes in a scrollable window (8 notes at a time)
+  - Navigation with sliding window logic
+- **About screen**
+  - Displays version and author info
+
+---
+
+## ⚠️ Limitations (Current)
+- Notes are stored in RAM → lost on reset (no persistent storage yet)
+- No multi-line editing yet
+- Scrolling in note editor not implemented
 
 ---
 
@@ -51,14 +54,10 @@ lib_deps =
 
 ---
 
-## 🎮 Controls
-### The cardputer is controlled through the built-in keyboard
-- `1` = New Note
-- `2` = View Notes 
-- `3` = About
-- **Enter** = Save note
-- **Del** = Backspace/Delete
-- **← / → arrows** = Move cursor
-- **ESC / ` (backtick)** = Return to menu
+## 🚀 Future Plans
+- Add **persistent storage** (SPIFFS/SD card support)
+- Improve **View Notes** navigation (scrolling, delete notes)
+- Enable **multi-line note editing**
+- Enhance **cursor & text rendering** for smoother UX
 
----
+

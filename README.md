@@ -1,63 +1,80 @@
-# 📝 Cardputer Notes App (Current Version)
+# 📝 Cardputer Notes App
 
-A lightweight Notes app for the **M5Stack Cardputer (ESP32‑S3)**.  
-This version includes a working menu system, note creation with editing features, note storage in memory, and a notes viewer.
+A lightweight **Notes application** for the [M5Stack Cardputer (ESP32-S3)](https://shop.m5stack.com/products/m5stack-cardputer-kit-w-m5stamps3).  
+It provides a simple way to create, edit, and view text notes directly on the device.
 
 ---
-![Cardputer](photos/notes1.jpeg)
 
-## ✅ Features (Current)
-- **Menu** with 3 options:  
-  1. **New Note**  
-  2. **View Notes**  
-  3. **About**
-- **New Note**
-  - Type text with `M5Canvas`
-  - **Backspace/Delete support** (remove characters before cursor)
-  - **Left / Right arrows** move the cursor
-  - **Enter** saves the note (stored in RAM, up to 20 notes)
-  - **` (backtick)** returns to menu
-  - Cursor visibly blinks for feedback
-- **View Notes**
-  - Shows saved notes in a scrollable window (8 notes at a time)
-  - Navigation with sliding window logic
+## ✨ Features
+- **Menu navigation**
+  - Options: *New Note*, *View Notes*, *About*
+- **Persistent storage**
+  - Notes saved to the SD card (`/note1.txt`, `/note2.txt`, …)  
+  - Survive resets and power-off
+- **New Note editor**
+  - Smooth text input with `M5Canvas`
+  - Blinking cursor for clear typing feedback
+  - Supports **backspace** and **delete**
+- **Edit existing notes**
+  - Open notes from the list and continue editing
+- **View Notes list**
+  - Scroll through up to 20 saved notes
+  - Highlighted selection window (8 visible at a time)
 - **About screen**
-  - Displays version and author info
+  - Displays app version & author
 
 ---
 
-## ⚠️ Limitations (Current)
-- Notes are stored in RAM → lost on reset (no persistent storage yet)
-- No multi-line editing yet
-- Scrolling in note editor not implemented
+## ⚙️ Requirements
+- **Hardware**
+  - M5Stack Cardputer (ESP32-S3)
+  - microSD card (FAT32)
+- **Libraries**
+  - [M5Unified](https://github.com/m5stack/M5Unified)  
+  - [M5Cardputer](https://github.com/m5stack/M5Cardputer)  
+  - [M5GFX](https://github.com/m5stack/M5GFX)  
+  - AsyncTCP & ESPAsyncWebServer (already common with ESP32 projects)
 
 ---
 
-## 🗂️ PlatformIO `platformio.ini`
+## ▶️ Usage
+1. Insert a microSD card into the Cardputer.  
+2. Flash the firmware with [PlatformIO](https://platformio.org/).  
+3. On boot, the **Menu** is shown:
+   - `1` → New Note  
+   - `2` → View Notes  
+   - `3` → About  
+4. In *New Note*:
+   - Type to add text.  
+   - `Enter` saves to SD card.  
+   - Backspace/Delete supported.  
+   - Press backtick (\`) to return to the menu.
+5. In *View Notes*:
+   - Use arrow keys to scroll.  
+   - Press `Enter` to edit a selected note.
+
+---
+
+## 📷 Screenshot
+<img src="photos/notes.jpeg" alt="Cardputer Notes App" width="350" align="left" />
+
+---
+
+## 📂 PlatformIO `platformio.ini`
+
 ```ini
-[env:m5stack-stamp-s3]
+[env:cardputer]
 platform = espressif32
 board = esp32-s3-devkitc-1
 framework = arduino
 upload_speed = 1500000
+monitor_speed = 115200
 build_flags = 
     -DESP32S3
     -DCORE_DEBUG_LEVEL=5
     -DARDUINO_USB_CDC_ON_BOOT=1
     -DARDUINO_USB_MODE=1
 lib_deps = 
-    M5Unified=https://github.com/m5stack/M5Unified
+    m5stack/M5Cardputer@^1.0.3
     m5stack/M5GFX@^0.2.9
     m5stack/M5Unified@^0.2.7
-    m5stack/M5Cardputer@^1.0.3
-```
-
----
-
-## 🚀 Future Plans
-- Add **persistent storage** (SPIFFS/SD card support)
-- Improve **View Notes** navigation (scrolling, delete notes)
-- Enable **multi-line note editing**
-- Enhance **cursor & text rendering** for smoother UX
-
-

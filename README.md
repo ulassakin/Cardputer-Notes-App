@@ -33,7 +33,6 @@ It provides a simple way to create, edit, and view text notes directly on the de
   - [M5Unified](https://github.com/m5stack/M5Unified)  
   - [M5Cardputer](https://github.com/m5stack/M5Cardputer)  
   - [M5GFX](https://github.com/m5stack/M5GFX)  
-  - AsyncTCP & ESPAsyncWebServer (already common with ESP32 projects)
 
 ---
 

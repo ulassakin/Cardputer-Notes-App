@@ -18,8 +18,8 @@ It provides a simple way to create, edit, and view text notes directly on the de
 - **Edit existing notes**
   - Open notes from the list and continue editing
 - **View Notes list**
-  - Scroll through up to 20 saved notes
-  - Highlighted selection window (8 visible at a time)
+  - Scroll through saved notes easily
+  - Highlighted selection window for navigation
 - **About screen**
   - Displays app version & author
 
@@ -51,7 +51,7 @@ It provides a simple way to create, edit, and view text notes directly on the de
 5. In *View Notes*:
    - Use arrow keys to scroll.  
    - Press `Enter` to edit a selected note.
-   - Press `delete` to delete an existing note.
+   - Press `delete` to remove an existing note.
 
 ---
 

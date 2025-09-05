@@ -37,7 +37,7 @@ const unsigned long blinkInterval = 500; // ms
 // Current state
 AppState currentState = MENU;
 
-// Canvas
+// Create the Canvas
 M5Canvas notecanvas(&M5Cardputer.Display);
 
 // ---------- UI helpers ----------
@@ -73,7 +73,7 @@ void canvasSetup(){
   notecanvas.setTextSize(2);
   notecanvas.setTextScroll(true);
 }
-
+//Drawing and placing the cursor
 void drawNoteWithCursor() {
     notecanvas.fillScreen(BLACK);
     notecanvas.setFont(&fonts::Font0);
@@ -393,3 +393,4 @@ void loop() {
         }
     }
 }
+

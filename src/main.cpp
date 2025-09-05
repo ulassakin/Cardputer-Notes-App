@@ -6,6 +6,7 @@ enum AppState {
     MENU,
     NEW_NOTE,
     VIEW_NOTES,
+    EDIT_NOTE,
     ABOUT
 };
 
@@ -79,7 +80,10 @@ void drawNoteWithCursor() {
     int startX = 0;
     int startY = 0;
 
-    String header = "New Note (press Enter to save):";
+    String header = (currentState == NEW_NOTE) 
+                  ? "New Note (press Enter to save):"
+                  : "Edit Note (press Enter to save):";
+
     notecanvas.setCursor(startX, startY);
     notecanvas.setTextColor(WHITE, BLACK);
     notecanvas.print(header);
@@ -103,7 +107,7 @@ void drawNoteWithCursor() {
 
     // Draw cursor only if visible
     if (cursorVisible) {
-        notecanvas.drawLine(cursorX, cursorY, cursorX, cursorY + fontHeight, PURPLE);
+        notecanvas.drawLine(cursorX, cursorY, cursorX, cursorY + fontHeight, WHITE);
     }
 
     notecanvas.pushSprite(0, 0);
@@ -125,7 +129,7 @@ void loop() {
     M5Cardputer.update();
 
     // Handle blinking in NEW_NOTE state
-    if (currentState == NEW_NOTE) {
+    if (currentState == NEW_NOTE || currentState == EDIT_NOTE) {
         if (millis() - lastBlink >= blinkInterval) {
             cursorVisible = !cursorVisible;  // toggle cursor state
             lastBlink = millis();
@@ -209,7 +213,7 @@ void loop() {
                 int noteIndex = startIndex + i;
                 if (noteIndex < noteCount) {
                     int marginTop = 5;
-                    notecanvas.setCursor(0, i * notecanvas.fontHeight());
+                    notecanvas.setCursor(0, i * notecanvas.fontHeight() + marginTop);
 
                     if (selectedIndex == noteIndex) {
                         // Highlight: purple background with white text
@@ -228,22 +232,80 @@ void loop() {
 
             if (M5Cardputer.Keyboard.isChange() && M5Cardputer.Keyboard.isPressed()) {
                 auto keys = M5Cardputer.Keyboard.keysState();
-                for (auto k : keys.word) {
-                    if (k == 96){
+                if (keys.enter && noteCount > 0){
+                        currentNote = notes[selectedIndex];
+                        currentState = EDIT_NOTE;
+                        cursorPosition = currentNote.length();
+                        drawNoteWithCursor();
+                }
+                
+                else{
+                    for (auto k : keys.word) {
+                        if (k == 96){
+                            drawMenu();
+                            currentState = MENU;
+                        }
+                        else if (k == 46 && selectedIndex < noteCount - 1) { // down arrow
+                            selectedIndex++;
+                            if(selectedIndex >= startIndex + windowSize){
+                                startIndex++;
+                            }
+                        }
+                        else if (k == 59 && selectedIndex > 0) { // up arrow
+                            selectedIndex--;
+                            if(selectedIndex < startIndex){
+                                startIndex--;
+                                if (startIndex < 0) startIndex = 0;
+                            }
+                        }
+
+                        
+                    }
+                }    
+            }
+            break;
+        }
+
+        case EDIT_NOTE: {
+            if (M5Cardputer.Keyboard.isChange() && M5Cardputer.Keyboard.isPressed()) {
+                auto keys = M5Cardputer.Keyboard.keysState();
+
+                if (keys.enter) {
+                
+                        notes[selectedIndex] = currentNote;
+                        currentNote = "";
+                        cursorPosition = 0;
                         drawMenu();
                         currentState = MENU;
+                    
+                }
+                else if (keys.del && currentNote.length() > 0) {
+                    if (cursorPosition > 0) {
+                        currentNote.remove(cursorPosition -1, 1);
+                        cursorPosition--;
                     }
-                    else if (k == 46 && selectedIndex < noteCount - 1) { // down arrow
-                        selectedIndex++;
-                        if(selectedIndex >= startIndex + windowSize){
-                            startIndex++;
+                    drawNoteWithCursor();
+                }
+                else {
+                    for (auto k : keys.word) {
+                        if (k == 96){ // Escape button
+                            drawMenu();
+                            currentState = MENU;
                         }
-                    }
-                    else if (k == 59 && selectedIndex > 0) { // up arrow
-                        selectedIndex--;
-                        if(selectedIndex < startIndex){
-                            startIndex--;
-                            if (startIndex < 0) startIndex = 0;
+                        else if (k == 44 && cursorPosition > 0){ // left arrow
+                            cursorPosition--;
+                            drawNoteWithCursor();
+                        }
+                        else if (k == 47 && (cursorPosition < currentNote.length())){ // right arrow
+                            cursorPosition++;
+                            drawNoteWithCursor();
+                        }
+                        else {
+                            String left  = currentNote.substring(0, cursorPosition);
+                            String right = currentNote.substring(cursorPosition);
+                            currentNote = left + (char)k + right;
+                            cursorPosition++;
+                            drawNoteWithCursor();
                         }
                     }
                 }
@@ -265,3 +327,4 @@ void loop() {
         }
     }
 }
+

@@ -1,5 +1,4 @@
 # 📝 Cardputer Notes App
-
 A lightweight **Notes application** for the [M5Stack Cardputer (ESP32-S3)](https://shop.m5stack.com/products/m5stack-cardputer-kit-w-m5stamps3).  
 It provides a simple way to create, edit, and view text notes directly on the device.
 
@@ -51,18 +50,20 @@ It provides a simple way to create, edit, and view text notes directly on the de
 5. In *View Notes*:
    - Use arrow keys to scroll.  
    - Press `Enter` to edit a selected note.
-   - Press `delete` to remove an existing note.
+   - Press `Delete` to remove an existing note.
 
 ---
 
 ## 📷 Screenshots
-<img src="photos/notes1.jpeg" alt="Cardputer Notes App" width="350" align="left" />
-<img src="photos/IMG_5054.jpg" alt="Cardputer Notes App" width="350" align="left" />
+
+<img src="photos/notes1.jpeg" alt="Cardputer Notes App" width="350" />
+<img src="photos/IMG_5054.jpg" alt="Cardputer Notes App" width="350" />
 
 ---
 
+## 📂 PlatformIO Configuration
 
-**📂 PlatformIO (platformio.ini)**
+**`platformio.ini`**
 
 ```ini
 [env:cardputer]
@@ -71,12 +72,13 @@ board = esp32-s3-devkitc-1
 framework = arduino
 upload_speed = 1500000
 monitor_speed = 115200
-build_flags = 
+build_flags =
     -DESP32S3
     -DCORE_DEBUG_LEVEL=5
     -DARDUINO_USB_CDC_ON_BOOT=1
     -DARDUINO_USB_MODE=1
-lib_deps = 
+lib_deps =
     m5stack/M5Cardputer@^1.0.3
     m5stack/M5GFX@^0.2.9
     m5stack/M5Unified@^0.2.7
+```
